@@ -1,7 +1,6 @@
 import './App.css'
 import illustration from './assets/snivy.jpeg'
 import normal_energy from './assets/leaf-energy.png'
-import PokemonForm from './PokemonForm.jsx'
 import { useState } from 'react'
 
 function App() {
