@@ -1,41 +1,91 @@
 import './App.css'
 import illustration from './assets/snivy.jpeg'
+import illustration2 from './assets/snivy.png'
 import normal_energy from './assets/leaf-energy.png'
 import { useState } from 'react'
 
+
 function App() {
+
+  const [form, setForm] = useState({
+    pokemon_name: "",
+    hp: 0,
+    attack_one_title: "",
+    attack_one_desc: "",
+    attack_two_title: "",
+    attack_two_desc: "",
+  })
+
+  const [submittedForm, setSubmittedForm] = useState({
+    pokemon_name: "Pokemon Name",
+    hp: 0,
+    attack_one_title: "Attack One",
+    attack_one_desc: "Attack One Description",
+    attack_two_title: "Attack Two",
+    attack_two_desc: "Attack Two Description",
+    image: illustration2
+  })
+
+  const [imagePreview, setImagePreview] = useState(null)
+
+  function handleForm(event) {
+    setForm({
+      ...form,
+      [event.target.name]: event.target.value
+    })
+  }
+
+  function handleImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      setImagePreview(fileUrl)
+    }
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setSubmittedForm({
+      ...form,
+      image: imagePreview
+
+    })
+  }
+
   return (
     <>
       <div className="container">
         <div className="form-panel">
           <div className="form-container">
             <h1 style={{ marginBottom: "30px" }}>Create Pokemon</h1>
-            <form action=" " >
-              <input type="text" placeholder="Pokemon's Name" />
-              <input type="text" placeholder="Pokemon's HP" />
-              <input type="text" placeholder="Skill Name" />
-              <input type="text" placeholder="Skill Description" />
-              <input type="text" placeholder="Skill Name" />
-              <input type="text" placeholder="Skill Description" />
-              <button type="button">Create Pokemon</button>
+            <form onSubmit={handleSubmit}>
+              <input placeholder="Name" type="text" name="pokemon_name" value={form.pokemon_name} onChange={handleForm} />
+              <input placeholder="Hp" type="number" name="hp" value={form.hp} onChange={handleForm} />
+              <input placeholder="Attack 1" type="text" name="attack_one_title" value={form.attack_one_title} onChange={handleForm} />
+              <input placeholder="Attack Desc" type="text" name="attack_one_desc" value={form.attack_one_desc} onChange={handleForm} />
+              <input placeholder="Attack 2" type="text" name="attack_two_title" value={form.attack_two_title} onChange={handleForm} />
+              <input placeholder="Attack Desc" type="text" name="attack_two_desc" value={form.attack_two_desc} onChange={handleForm} />
+              <input type="file" onChange={handleImage} />
+              {/* <img src={submittedForm.image} alt="Image" /> */}
+              <button type="submit">Create Pokemon</button>
             </form>
           </div>
         </div>
         <div className="card-panel">
           <div className="outer-card">
-            <div className="inner-card">
+            <div className="inner-card" style={{ backgroundImage: `url(${submittedForm.image})` }}>
               <Card_Header
-                pokemon_name="Snivy"
-                hp="50"
+                pokemon_name={submittedForm.pokemon_name}
+                hp={submittedForm.hp}
               />
               <div className="card-skill">
                 <Skill
-                  name="Leaf Slash"
-                  description="Deal 20 damage. During your next turn, this Pokémon's attacks do 10 more damage to the opponent's Active Pokémon."
+                  name={submittedForm.attack_one_title}
+                  description={submittedForm.attack_one_desc}
                 />
                 <Skill
-                  name="Nature's Growth"
-                  description="Search your deck for a Grass Energy card and attach it to this Pokémon. Then shuffle your deck. If you can't attach an Energy this way, heal 20 HP from this Pokémon instead."
+                  name={submittedForm.attack_two_title}
+                  description={submittedForm.attack_two_desc}
                 />
               </div>
             </div>
